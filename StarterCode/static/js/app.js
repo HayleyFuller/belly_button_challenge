@@ -88,3 +88,5 @@ function bubble(selectValue) {
 // Parts 4 & 5) - Make the demographics panel
 
 // Part 6) - Toggle the page to the new plots when the option has been changed using the dropdown Menu for Test Subject ID.
+
+//NOTE: This challenge was particularly difficult. This code is heavily reserached and constructed. From Stack, Google and GitHub
