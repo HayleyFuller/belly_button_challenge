@@ -30,9 +30,61 @@ function init() {
 }
 
 // Part 2) - Make the bar chart
-  
+function bar(selectValue) {
+    // Get the JSON data and have the console log it
+    d3.json(url).then((data) => {
+        console.log(`Data: ${data}`);
+        // Create an array of objects
+        let samples = data.samples;
+        // Filter the data where id = the selected value 
+        let filterData = samples.filter((sample) => sample.id === selectValue);
+        // Have the first object as an obj variable
+        let obj = filterData[0];
+        // Trace for the data for the bar chart. Remember to display the chart horizontaly and slice the top 10 OTUs
+        let trace = [{
+            x: obj.sample_values.slice(0,10).reverse(),
+            y: obj.otu_ids.slice(0,10).map((otu_id) => `OTU ${otu_id}`).reverse(),
+            text: obj.otu_labels.slice(0,10).reverse(),
+            type: "bar",
+            marker: {
+                color: "lightblue"
+            },
+            orientation: "h"
+        }];
+        // Plot the data in a bar chart using Plotly
+        Plotly.newPlot("bar", trace);
+    });
+} 
 // Part 3) - Create the bubble chart
-
+function bubble(selectValue) {
+    // Get the JSON data and have the console log it
+    d3.json(url).then((data) => {
+        // Create an array of objects
+        let samples = data.samples;
+        // Filter the data where id = the selected value 
+        let filterData = samples.filter((sample) => sample.id === selectValue);
+        // Have the first object as an obj variable
+        let obj = filterData[0];
+        // Trace the data for the bubble chart.
+        let trace = [{
+            x: obj.otu_ids,
+            y: obj.sample_values,
+            text: obj.otu_labels,
+            mode: "markers",
+            marker: {
+                size: obj.sample_values,
+                color: obj.otu_ids,
+                colorscale: "Rainbow"
+            }
+        }];
+        // Add the x-axis lengend
+        let layout = {
+            xaxis: {title: "OTU ID"}
+        };
+        //Plot the data in a bubble chart using Plotly
+        Plotly.newPlot("bubble", trace, layout);
+    });
+}
 // Parts 4 & 5) - Make the demographics panel
 
 // Part 6) - Toggle the page to the new plots when the option has been changed using the dropdown Menu for Test Subject ID.
