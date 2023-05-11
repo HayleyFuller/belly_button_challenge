@@ -14,18 +14,17 @@ function init() {
     d3.json(url).then((data) => {
         console.log(`Data: ${data}`);
         // The array of id names
-        let names = data.names;
-        // Next - iterate through the names in the array. Then append each name as an option for the dropdown menu.
-        // Resulting in each name added to the html file as an option.
-        names.forEach((name) => {
+        let namesID = data.names;
+        // Next - iterate through the names in the array. And append each name as an option for the dropdown menu.
+        namesID.forEach((name) => {
             dropdownMenu.append("option").text(name).property("value", name);
         });
         // Have the first name as a name variable
-        let name = names[0];
+        let nameData = namesID[0];
         // Call the functions to make the demographic panel, the bar chart, and the bubble chart
-        demographic(name);
-        bar(name);
-        bubble(name);
+        demographic(nameData);
+        bar(nameData);
+        bubble(nameData);
     });
 }
 
@@ -35,10 +34,10 @@ function bar(selectValue) {
     d3.json(url).then((data) => {
         console.log(`Data: ${data}`);
         // Create an array of objects
-        let samples = data.samples;
+        let sampleData = data.samples;
         // Filter the data where id = the selected value 
-        let filterData = samples.filter((sample) => sample.id === selectValue);
-        // Have the first object as an obj variable
+        let filterData = sampleData.filter((sample) => sample.id === selectValue);
+        // Have the first object as an object variable
         let obj = filterData[0];
         // Trace for the data for the bar chart. Remember to display the chart horizontaly and slice the top 10 OTUs
         let trace = [{
@@ -54,16 +53,17 @@ function bar(selectValue) {
         // Plot the data in a bar chart using Plotly
         Plotly.newPlot("bar", trace);
     });
-} 
+}
+  
 // Part 3) - Create the bubble chart
 function bubble(selectValue) {
     // Get the JSON data and have the console log it
     d3.json(url).then((data) => {
         // Create an array of objects
-        let samples = data.samples;
+        let sampleData = data.samples;
         // Filter the data where id = the selected value 
-        let filterData = samples.filter((sample) => sample.id === selectValue);
-        // Have the first object as an obj variable
+        let filterData = sampleData.filter((sample) => sample.id === selectValue);
+        // Have the first object as an object variable
         let obj = filterData[0];
         // Trace the data for the bubble chart.
         let trace = [{
@@ -86,7 +86,32 @@ function bubble(selectValue) {
     });
 }
 // Parts 4 & 5) - Make the demographics panel
-
+function demographic(selectValue) {
+    // Get the JSON data and have the console log it
+    d3.json(url).then((data) => {
+        console.log(`Data: ${data}`);
+        // Have an array of metadata objects and filter through with the first object as an object variable
+        let metaData = data.metadata;
+        let filterData = metaData.filter((meta) => meta.id == selectValue);
+        let obj = filterData[0]
+        // Clear any child elements in div with id sample-metadata
+        d3.select("#sample-metadata").html("");
+        // Return the array of a given object's key's, value's
+        let entries = Object.entries(obj);
+        // Iterate through the entries array. Add a h6 child element for each key value pair to the div with id sample-metadata
+        entries.forEach(([key,value]) => {
+            d3.select("#sample-metadata").append("h6").text(`${key}: ${value}`);
+        });
+        // Log the entries array
+        console.log(entries);
+    });
+  }
 // Part 6) - Toggle the page to the new plots when the option has been changed using the dropdown Menu for Test Subject ID.
+function optionChanged(selectValue) {
+    demographic(selectValue);
+    bar(selectValue);
+    bubble(selectValue);
+}
 
-//NOTE: This challenge was particularly difficult. This code is heavily reserached and constructed. From Stack, Google and GitHub
+init();
+//NOTE: This challenge was particularly difficult. The code in this file is heavily reserached using Stack, Google and GitHub.
