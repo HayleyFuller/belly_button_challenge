@@ -30,7 +30,9 @@ The assignment overall is to build an interactive dashboard to explore the Belly
 
 5.	Display each key-value pair from the metadata JSON object on the page.
 
-6. Update all the plots when a new sample is selected. Create any layout for the dashboard. 
+6. Update all the plots when a new sample is selected. Create any layout for the dashboard.
+
+7.	Deploy your app to a free static page hosting service, such as GitHub Pages.
 
 
 
